@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
+    integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.src.js"></script>
+  
+</head>
+
+<body>
+  <div class="container">
+    <h1 class='text-center'>Customer Information</h1>
+    <br>
+    <table class="table">
+      {% if customer_info %}
+      {% for field_name, form_entry in customer_info.items %}
+      <tbody>
+        <tr>
+          <th scope="row">
+            {{ field_name }}
+          </th>
+          <td class='text-center'>{{ form_entry }}</td>
+        </tr>
+      </tbody>
+      {% endfor %}
+      {% else %}
+      No records were were found
+      {% endif %}
+    </table>
+
+    <h1 class='text-center'>Survey Report</h1>
+    <br>
+    <table class="table">
+      <tbody>
+      {% if survey_response %}
+      {% for key, val in survey_response.items %}
+        <tr>
+          <th>
+            {{ key }}
+          </th>
+          <td>
+              {% if val == 1 %}
+              <h3 class="text-danger">RED</h3>
+              {% elif val == 2 %}
+              <h3 class="text-warning">AMBER</h3>
+              {% else %}
+              <h3 class="text-success">GREEN</h3>
+              {% endif %}
+          </td>
+        </tr>
+ 
+      {% endfor %}
+      {% else %}
+      Survey responses not found
+      {% endif %}
+      </tbody>
+    </table>  
+  </div>
+
+  {% comment %} <script>
+  var survey_obj = {{ js_survey | safe}}
+
+$(document).ready(function(){
+  for (const [key, value] of Object.entries(survey_obj)) {
+    Highcharts.chart('sample_' + key, {
+  chart: {
+    type: 'bar',
+    height: 70
+  },
+  title: {
+    text: ''
+  },
+  xAxis: {
+    lineWidth: 0,
+    gridLineWidth: 0,
+    categories: ['']
+  },
+  yAxis: {
+    lineWidth: 0,
+    gridLineWidth: 0,
+   labels: {
+       enabled: false
+   },
+   minorTickLength: 0,
+   tickLength: 0,
+    title: {
+      text: ''
+    }
+  },
+  legend: {
+    enabled: false
+  },
+  plotOptions: {
+    bar: {
+      pointWidth: 50
+    },
+    series: {
+      stacking: 'normal',
+       colorByPoint: true
+    }
+  },
+  series: [{
+    data: [{y: 1, color: value === 1 ? "rgba(220,20,60,1)" : "rgba(220,20,60,0.2)"}]
+  }, {
+    data: [{y:1, color: value === 2 ? "rgba(255,215,0,1)" : "rgba(255,215,0,0.2)"}]
+  }, {
+    data: [{y:1, color: value === 3 ? "rgba(34,139,34,1)" : "rgba(34,139,34,0.2)"}]
+  }]
+})
+  }});
+    {% comment %} $(document).ready(function(){
+      var survey_obj = {{ js_survey | safe}}
+    for (const [key, value] of Object.entries(survey_obj)) {
+      var config = {
+        type: 'bar',
+        data: {
+          labels: " ",
+          datasets: [{
+            barPercentage: 2,
+            backgroundColor: value === 1 ? "rgba(220,20,60,1)" : "rgba(220,20,60,0.2)",
+            data: [10],
+          }, {
+            barPercentage: 2,
+            backgroundColor: value === 2 ? "rgba(255,215,0,1)" : "rgba(255,215,0,0.2)",
+            data: [10]
+          },
+          {
+            barPercentage: 2,
+            backgroundColor: value === 3 ? "rgba(34,139,34,1)" : "rgba(34,139,34,0.2)",
+            data: [10]
+          }
+          ]
+        },
+        options: {
+          animation: { duration: 0},
+          hover: {mode: null},
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              enabled: false
+            }
+          },
+          maintainAspectRatio: false,
+          indexAxis: 'y',
+          scales: {
+            x: {
+              stacked: true,
+              ticks: {
+                display: false
+              },
+              grid: {
+                display: false,
+                borderWidth: 0
+              }
+            },
+            y: {
+              stacked: true,
+              ticks: {
+                display: false
+              },
+              grid: {
+                display: false,
+                borderWidth: 0
+              }
+            }
+          }
+        }
+      };
+
+      var ctx = document.getElementById("myChart_" + key).getContext("2d");
+      new Chart(ctx, config);
+    }
+    });  
+    </script> {% endcomment %}
+
+</body>
+
+</html>
