@@ -262,4 +262,4 @@ thumb
 sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/react
-backend/survey_api/views.py
+# backend/survey_api/views.py
